@@ -175,7 +175,7 @@ class UserHomeViewController: BaseViewController {
             .subscribe(onNext: { [weak self] in
                 self?.presentModal()
             }).disposed(by: disposeBag)
-        
+
         attandanceBtn.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.secondPresentModal()
