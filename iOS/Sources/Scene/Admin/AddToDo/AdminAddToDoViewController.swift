@@ -2,9 +2,12 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class AdminAddToDoViewController: BaseViewController {
 
+    private let viewModel = AdminAddToDoViewModel()
     private let toDoLabel = UILabel().then {
         $0.text = "ToDo"
         $0.font = .systemFont(ofSize: 14, weight: .medium)
@@ -46,6 +49,21 @@ class AdminAddToDoViewController: BaseViewController {
         $0.layer.cornerRadius = 8
     }
 
+    override func bind() {
+        let input = AdminAddToDoViewModel.Input(
+            title: toDoTextField.rx.text.orEmpty.asDriver(),
+            date: timeTextField.rx.text.orEmpty.asDriver(),
+            content: contentTextView.rx.text.orEmpty.asDriver(),
+            onTap: addButton.rx.tap.asDriver()
+        )
+        let output = viewModel.transform(input)
+
+        output.isSuccess
+            .subscribe(onNext: {
+                print("!!!\($0)")
+            })
+            .disposed(by: disposeBag)
+    }
     override func addSubviews() {
         [toDoLabel, toDoTextField, timeLabel, timeTextField,
          contentLabel, contentTextView, addButton].forEach { view.addSubview($0) }

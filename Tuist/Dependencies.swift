@@ -21,6 +21,11 @@ let depencies = Dependencies(
         .remote(
             url: "https://github.com/Moya/Moya.git",
             requirement: .upToNextMajor(from: "15.0.0")
+        ),
+        // Charts
+        .remote(
+            url: "https://github.com/danielgindi/Charts.git",
+            requirement: .upToNextMajor(from: "4.1.0")
         )
     ]),
     platforms: [.iOS]

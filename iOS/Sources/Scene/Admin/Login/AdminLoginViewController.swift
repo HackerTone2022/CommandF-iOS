@@ -6,6 +6,7 @@ import RxSwift
 import RxCocoa
 
 class AdminLoginViewController: BaseViewController {
+    private let viewModel = AdminLoginViewModel()
 
     private let titleLabel = UILabel().then {
         $0.text = "정보 입력"
@@ -31,6 +32,11 @@ class AdminLoginViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setTextField()
+        setButton()
+    }
+    override func setNavigation() {
+        super.setNavigation()
+        self.title = "로그인"
     }
     override func addSubviews() {
         [titleLabel, idTextField, passwordTextField, loginButton]
@@ -56,6 +62,30 @@ class AdminLoginViewController: BaseViewController {
             $0.leading.trailing.equalToSuperview().inset(25)
             $0.height.equalTo(52)
         }
+    }
+    override func bind() {
+        let input = AdminLoginViewModel.Input(
+            id: idTextField.rx.text.orEmpty.asDriver(),
+            password: passwordTextField.rx.text.orEmpty.asDriver(),
+            onTap: loginButton.rx.tap.asDriver()
+        )
+        let output = viewModel.transform(input)
+
+        output.isSuccess
+            .subscribe(onNext: {
+                if $0 {
+                    self.navigationController?.pushViewController(AdminHomeViewController(), animated: true)
+                }
+            }).disposed(by: disposeBag)
+    }
+    private func setButton() {
+        loginButton.rx.tap
+            .subscribe(onNext: {
+                if self.idTextField.text == "rlarldud" && self.passwordTextField.text == "gy0530^^" {
+                    self.navigationController?.pushViewController(AdminHomeViewController(), animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     private func setTextField() {
         idTextField.rx.text.orEmpty

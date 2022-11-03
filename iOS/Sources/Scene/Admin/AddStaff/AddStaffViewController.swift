@@ -1,7 +1,12 @@
 import UIKit
 
+import SnapKit
+import RxSwift
+import RxCocoa
+
 class AddStaffViewController: BaseViewController {
 
+    var isDismiss = PublishRelay<Bool>()
     let staffIdTextField = UITextField().then {
         $0.placeholder = "사원번호"
         $0.font = .systemFont(ofSize: 15, weight: .regular)
@@ -25,6 +30,9 @@ class AddStaffViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setTextField()
+        addButton.rx.tap.subscribe(onNext: {
+            self.dismiss(animated: true)
+        }).disposed(by: disposeBag)
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -33,6 +41,13 @@ class AddStaffViewController: BaseViewController {
                 $0.text = ""
                 $0.layer.addBorder([.bottom], color: .white, width: 1)
             }
+    }
+    override func bind() {
+        isDismiss.subscribe(onNext: {
+            if $0 {
+                self.navigationController?.popViewController(animated: true)
+            }
+        }).disposed(by: disposeBag)
     }
     override func addSubviews() {
         [staffIdTextField, nameTextField, passwordTextField, addButton]

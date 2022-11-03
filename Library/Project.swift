@@ -10,6 +10,7 @@ let project = Project.dynamicFramework(
         .SPM.Moya,
         .SPM.RxMoya,
         .SPM.SnapKit,
-        .SPM.Then
+        .SPM.Then,
+        .SPM.Charts
     ]
 )
