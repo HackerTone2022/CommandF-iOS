@@ -4,7 +4,7 @@ import SnapKit
 import Then
 
 class UserWorkTypeViewController: BaseViewController {
-    
+
     private let button = UIButton(type: .system).then {
         $0.setTitle("근무형태", for: .normal)
         $0.backgroundColor = .setRGB(red: 253, green: 226, blue: 131, alpha: 100)
@@ -13,10 +13,8 @@ class UserWorkTypeViewController: BaseViewController {
     }
     private let menu = UIMenu(title: "", children: [
         UIAction(title: "재택근무") { action in
-            
         },
         UIAction(title: "회사출근") { action in
-            
         }
     ])
     private let attandanceBtn = UIButton(type: .system).then {
