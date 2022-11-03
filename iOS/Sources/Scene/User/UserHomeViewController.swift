@@ -5,6 +5,7 @@ import Then
 
 class UserHomeViewController: BaseViewController {
 
+    private let userAddToDoListViewController = UserAddToDoListViewController()
     private let staffInformationView = UIView().then {
         $0.layer.cornerRadius = 20
         $0.backgroundColor = .white
@@ -73,6 +74,7 @@ class UserHomeViewController: BaseViewController {
         demoData()
         self.toDoTableView.delegate = self
         self.toDoTableView.dataSource = self
+        setButton()
     }
     override func setNavigation() {
         self.navigationItem.title = "홈"
@@ -167,6 +169,21 @@ class UserHomeViewController: BaseViewController {
         }
     }
 
+    private func setButton() {
+        addBtn.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.presentModal()
+            }).disposed(by: disposeBag)
+    }
+    private func presentModal() {
+        userAddToDoListViewController.modalPresentationStyle = .pageSheet
+
+        if let sheet = userAddToDoListViewController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.preferredCornerRadius = 41
+        }
+        self.present(userAddToDoListViewController, animated: true)
+    }
     private func demoData() {
         profileImgView.image = UIImage(systemName: "circle.fill")
         profileLable.text = "김시안"
