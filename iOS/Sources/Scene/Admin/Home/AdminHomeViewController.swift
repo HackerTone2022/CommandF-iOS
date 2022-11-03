@@ -2,10 +2,20 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class AdminHomeViewController: BaseViewController {
 
+    private var isSuccess = false
+    private let viewModel = AdminHomeViewModel()
     private let addStaffViewController = AddStaffViewController()
+    private var color: [UIColor] = [.red, .orange, .yellow, .green, .blue]
+    private var name = ["김기영", "김시안", "홍승재", "박주영", "조병진"]
+    private var time = ["08:00 ~ 17:00", "09:00 ~ 18:00", "08:30 ~ 17:30", "08:55 ~", "09:23 ~"]
+    private var state = ["퇴근", "퇴근", "퇴근", "근무 중", "근무 중"]
+    private let getList = PublishRelay<Void>()
+    private let moveDetail = PublishRelay<IndexPath>()
     private let infoView = UIView().then {
         $0.backgroundColor = .setRGB(red: 255, green: 238, blue: 177, alpha: 100)
         $0.layer.cornerRadius = 25
@@ -60,6 +70,47 @@ class AdminHomeViewController: BaseViewController {
         super.viewDidLoad()
         setTableView()
         setButton()
+        setDemoData()
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        getList.accept(())
+    }
+    override func bind() {
+        let input = AdminHomeViewModel.Input(
+            getList: getList.asDriver(onErrorJustReturn: ()),
+            index: staffInfoTableView.rx.itemSelected.asDriver(),
+            id: addStaffViewController.staffIdTextField.rx.text.orEmpty.asDriver(),
+            name: addStaffViewController.passwordTextField.rx.text.orEmpty.asDriver(),
+            password: addStaffViewController.passwordTextField.rx.text.orEmpty.asDriver(),
+            onTap: addStaffViewController.addButton.rx.tap.asDriver()
+        )
+
+        let output = viewModel.transform(input)
+
+        output.userList.bind(to: staffInfoTableView.rx.items(
+            cellIdentifier: "cell",
+            cellType: AdminStaffInfoTableViewCell.self
+        )) { _, items, cell in
+            cell.nameLabel.text = items.name
+            cell.profileImageView.image = UIImage(data: items.profileImage)
+            cell.stateLabel.text = items.state.rawValue
+            cell.timeLabel.text = "\(items.startAt?.timeToString()) ~ \(items.dateAt?.timeToString())"
+        }
+        .disposed(by: disposeBag)
+
+        output.id
+            .subscribe(onNext: {
+                let viewController = StaffDetailViewController()
+                viewController.id = $0
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }).disposed(by: disposeBag)
+
+        output.isSuccess
+            .subscribe(onNext: {
+                self.addStaffViewController.isDismiss.accept($0)
+            })
+            .disposed(by: disposeBag)
     }
     override func addSubviews() {
         [infoView, staffInfoLabel, staffAddButton, staffInfoTableView]
@@ -93,7 +144,7 @@ class AdminHomeViewController: BaseViewController {
             $0.leading.equalTo(weekToAverageAttendanceLabel.snp.leading)
         }
         weekToAverageLeaveWorkTimeLabel.snp.makeConstraints {
-            $0.centerY.equalTo(weekToAverageAttendanceLabel)
+            $0.centerY.equalTo(weekToAverageLeaveWorkLabel)
             $0.leading.equalTo(weekToAverageAttendanceLabel.snp.trailing).offset(10)
         }
         weekToAverageWorkLabel.snp.makeConstraints {
@@ -111,7 +162,7 @@ class AdminHomeViewController: BaseViewController {
         }
         weekToAllWorkTimeLabel.snp.makeConstraints {
             $0.centerY.equalTo(weekToAllWorkLabel)
-            $0.leading.equalTo(weekToAllWorkLabel.snp.trailing).offset(10)
+            $0.leading.equalTo(weekToAverageWorkTimeLabel.snp.leading)
         }
         staffInfoLabel.snp.makeConstraints {
             $0.top.equalTo(infoView.snp.bottom).offset(40)
@@ -128,12 +179,32 @@ class AdminHomeViewController: BaseViewController {
             $0.bottom.equalToSuperview()
         }
     }
+    override func setNavigation() {
+        super.setNavigation()
+        self.title = "홈"
+    }
 
+    private func setDemoData() {
+        self.weekToAverageAttendanceTimeLabel.text = "08:04"
+        self.weekToAverageLeaveWorkTimeLabel.text = "17:05"
+        self.weekToAverageWorkTimeLabel.text = "8시간 30분"
+        self.weekToAllWorkTimeLabel.text = "42시간"
+    }
     private func setButton() {
         staffAddButton.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.presentModal()
             }).disposed(by: disposeBag)
+        addStaffViewController.addButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.dismiss(animated: true)
+                self?.name.append("김준호")
+                self?.color.append(.purple)
+                self?.state.append("출근전")
+                self?.time.append("")
+                self?.staffInfoTableView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     private func presentModal() {
         addStaffViewController.modalPresentationStyle = .pageSheet
@@ -150,19 +221,23 @@ extension AdminHomeViewController: UITableViewDelegate, UITableViewDataSource {
     private func setTableView() {
         staffInfoTableView.dataSource = self
         staffInfoTableView.delegate = self
+        staffInfoTableView.rx.itemSelected
+            .subscribe(onNext: {_ in
+                self.navigationController?.pushViewController(StaffDetailViewController(), animated: true)
+            }).disposed(by: disposeBag)
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return name.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(
             withIdentifier: "cell",
             for: indexPath
         ) as? AdminStaffInfoTableViewCell else { return UITableViewCell() }
-        cell.profileImageView.image = .init(systemName: "person")
-        cell.nameLabel.text = "김시안"
-        cell.timeLabel.text = "08:00 ~ 05:00"
-        cell.stateLabel.text = "퇴근중"
+        cell.profileImageView.backgroundColor = color[indexPath.row]
+        cell.nameLabel.text = name[indexPath.row]
+        cell.timeLabel.text = time[indexPath.row]
+        cell.stateLabel.text = state[indexPath.row]
         cell.stateLabel.backgroundColor = .setRGB(red: 255, green: 218, blue: 85, alpha: 100)
 
         return cell
