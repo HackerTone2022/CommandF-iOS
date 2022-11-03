@@ -32,7 +32,7 @@ class AdminLoginViewController: BaseViewController {
         super.viewDidLoad()
         setTextField()
     }
-    override func addSubivews() {
+    override func addSubviews() {
         [titleLabel, idTextField, passwordTextField, loginButton]
             .forEach { view.addSubview($0) }
     }

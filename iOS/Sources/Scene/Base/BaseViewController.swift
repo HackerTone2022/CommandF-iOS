@@ -13,14 +13,14 @@ class BaseViewController: UIViewController {
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        addSubivews()
+        addSubviews()
         makeSubviewConstraints()
     }
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
 
-    func addSubivews() { }
+    func addSubviews() { }
     func makeSubviewConstraints() { }
     func bind() { }
     func setNavigation() { }

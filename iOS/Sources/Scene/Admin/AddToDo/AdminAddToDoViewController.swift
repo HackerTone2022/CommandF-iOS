@@ -46,7 +46,7 @@ class AdminAddToDoViewController: BaseViewController {
         $0.layer.cornerRadius = 8
     }
 
-    override func addSubivews() {
+    override func addSubviews() {
         [toDoLabel, toDoTextField, timeLabel, timeTextField,
          contentLabel, contentTextView, addButton].forEach { view.addSubview($0) }
     }

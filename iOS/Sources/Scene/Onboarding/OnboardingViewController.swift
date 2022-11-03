@@ -28,7 +28,7 @@ class OnboardingViewController: BaseViewController {
         $0.layer.cornerRadius = 8
     }
 
-    override func addSubivews() {
+    override func addSubviews() {
         [titleLabel, logoImageView, adminStartButton, userStartButton]
             .forEach { view.addSubview($0) }
     }

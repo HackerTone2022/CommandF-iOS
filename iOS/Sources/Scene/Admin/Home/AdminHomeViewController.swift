@@ -61,7 +61,7 @@ class AdminHomeViewController: BaseViewController {
         setTableView()
         setButton()
     }
-    override func addSubivews() {
+    override func addSubviews() {
         [infoView, staffInfoLabel, staffAddButton, staffInfoTableView]
             .forEach { view.addSubview($0) }
         [allStaffAverageWorkingTimeLabel, weekToAverageAttendanceLabel,

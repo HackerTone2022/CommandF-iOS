@@ -77,7 +77,7 @@ class UserHomeViewController: BaseViewController {
     override func setNavigation() {
         self.navigationItem.title = "홈"
     }
-    override func addSubivews() {
+    override func addSubviews() {
         [staffInformationView,
          attandanceBtn,
          toDoLabel,

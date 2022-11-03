@@ -59,7 +59,7 @@ class StaffDetailViewController: BaseViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
     }
-    override func addSubivews() {
+    override func addSubviews() {
         [profileImageView, nameLabel, collectionView,
          weekToAverageAttendanceButton, weekToAverageAttendanceLabel,
          weekToAverageLeaveHomeButton, weekToAverageLeaveHomeLabel,

@@ -34,7 +34,7 @@ class AddStaffViewController: BaseViewController {
                 $0.layer.addBorder([.bottom], color: .white, width: 1)
             }
     }
-    override func addSubivews() {
+    override func addSubviews() {
         [staffIdTextField, nameTextField, passwordTextField, addButton]
             .forEach { view.addSubview($0) }
     }
