@@ -2,6 +2,9 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
+import Service
 
 class OnboardingViewController: BaseViewController {
     private let titleLabel = UILabel().then {
@@ -28,6 +31,19 @@ class OnboardingViewController: BaseViewController {
         $0.layer.cornerRadius = 8
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        adminStartButton.rx.tap
+            .subscribe(onNext: {
+                self.navigationController?.pushViewController(AdminLoginViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+        userStartButton.rx.tap
+            .subscribe(onNext: {
+                self.navigationController?.pushViewController(ViewController(), animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
     override func addSubviews() {
         [titleLabel, logoImageView, adminStartButton, userStartButton]
             .forEach { view.addSubview($0) }
