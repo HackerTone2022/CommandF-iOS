@@ -3,7 +3,7 @@ import UIKit
 import SnapKit
 import Then
 
-class HomeViewController: BaseViewController {
+class UserHomeViewController: BaseViewController {
 
     private let staffInformationView = UIView().then {
         $0.layer.cornerRadius = 20
@@ -61,11 +61,18 @@ class HomeViewController: BaseViewController {
         $0.setImage(UIImage(systemName: "plus"), for: .normal)
         $0.tintColor = .black
     }
-    private let toDoTableView = UITableView()
+    private let toDoTableView = UITableView().then {
+           $0.register(UserHomeTableViewCell.self, forCellReuseIdentifier: UserHomeTableViewCell.identifier)
+           $0.backgroundColor = .setRGB(red: 246, green: 246, blue: 246, alpha: 100)
+           $0.rowHeight = 60
+           $0.separatorStyle = .none
+       }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         demoData()
+        self.toDoTableView.delegate = self
+        self.toDoTableView.dataSource = self
     }
     override func setNavigation() {
         self.navigationItem.title = "홈"
@@ -74,7 +81,8 @@ class HomeViewController: BaseViewController {
         [staffInformationView,
          attandanceBtn,
          toDoLabel,
-         addBtn
+         addBtn,
+         toDoTableView
         ]
             .forEach { view.addSubview($0) }
         [profileImgView,
@@ -152,6 +160,11 @@ class HomeViewController: BaseViewController {
             $0.centerY.equalTo(toDoLabel)
             $0.trailing.equalToSuperview().inset(20)
         }
+        toDoTableView.snp.makeConstraints {
+            $0.top.equalTo(toDoLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(15)
+            $0.bottom.equalToSuperview()
+        }
     }
 
     private func demoData() {
@@ -160,5 +173,22 @@ class HomeViewController: BaseViewController {
         teamLabel.text = "인사팀"
         attandanceTimeLabel.text = "8:00"
         officeHourTimeLabel.text = "04:05:16"
+    }
+}
+
+extension UserHomeViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 5
+    }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserHomeTableViewCell", for: indexPath)
+                as? UserHomeTableViewCell else { return UITableViewCell() }
+        return cell
+    }
+}
+
+extension UserHomeViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("select \(indexPath.row)")
     }
 }
