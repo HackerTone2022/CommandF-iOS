@@ -6,6 +6,7 @@ import Then
 class UserHomeViewController: BaseViewController {
 
     private let userAddToDoListViewController = UserAddToDoListViewController()
+    private let workTypeViewController = WorkTypeViewController()
     private let staffInformationView = UIView().then {
         $0.layer.cornerRadius = 20
         $0.backgroundColor = .white
@@ -174,6 +175,11 @@ class UserHomeViewController: BaseViewController {
             .subscribe(onNext: { [weak self] in
                 self?.presentModal()
             }).disposed(by: disposeBag)
+        
+        attandanceBtn.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.secondPresentModal()
+            }).disposed(by: disposeBag)
     }
     private func presentModal() {
         userAddToDoListViewController.modalPresentationStyle = .pageSheet
@@ -183,6 +189,15 @@ class UserHomeViewController: BaseViewController {
             sheet.preferredCornerRadius = 41
         }
         self.present(userAddToDoListViewController, animated: true)
+    }
+    private func secondPresentModal() {
+        userAddToDoListViewController.modalPresentationStyle = .pageSheet
+
+        if let sheet = workTypeViewController.sheetPresentationController {
+            sheet.detents = [.medium(), .large()]
+            sheet.preferredCornerRadius = 41
+        }
+        self.present(workTypeViewController, animated: true)
     }
     private func demoData() {
         profileImgView.image = UIImage(systemName: "circle.fill")
