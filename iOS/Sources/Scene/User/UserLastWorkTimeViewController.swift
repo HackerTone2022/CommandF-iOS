@@ -5,7 +5,7 @@ import Then
 
 class UserLastWorkTimeViewController: BaseViewController {
 
-    var date = ["2022.10.24", "2022.10.25", "2022.10.26", "2022.10.27", "2022.10.28"]
+    var date = ["2022.10.24", "2022.10.25", "2022.10.26", "2022.10.27", "2022.10.28", "2022.10.29", "2022.10.30", "2022.10.31", "2022.11.01", "2022.11.02"]
     private let nameLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .regular)
     }
@@ -14,14 +14,14 @@ class UserLastWorkTimeViewController: BaseViewController {
     }
     private let weekWorkTimeLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .regular)
-        $0.text = "님의 총 근무시간은"
+        $0.text = "님의 최근 한달 근무시간은"
     }
     private let secondWeekWorkTimeLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .regular)
         $0.text = "시간 입니다."
     }
     private let workTimeTableView = UITableView().then {
-        $0.register(UserWeekWorkTimeTableViewCell.self, forCellReuseIdentifier: UserWeekWorkTimeTableViewCell.identifier)
+        $0.register(UserLastWorkTimeViewCell.self, forCellReuseIdentifier: UserLastWorkTimeViewCell.identifier)
         $0.backgroundColor = .setRGB(red: 246, green: 246, blue: 246, alpha: 100)
         $0.rowHeight = 128
         $0.separatorStyle = .none
@@ -38,6 +38,7 @@ class UserLastWorkTimeViewController: BaseViewController {
         self.workTimeTableView.dataSource = self
     }
     override func setNavigation() {
+        super.setNavigation()
         self.navigationItem.title = "이전 근무시간 확인"
     }
     override func addSubviews() {
@@ -78,8 +79,8 @@ extension UserLastWorkTimeViewController: UITableViewDataSource {
         return date.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserWeekWorkTimeTableViewCell", for: indexPath)
-                as? UserWeekWorkTimeTableViewCell else { return UITableViewCell() }
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserLastWorkTimeViewCell", for: indexPath)
+                as? UserLastWorkTimeViewCell else { return UITableViewCell() }
         cell.dateLabel.text = date[indexPath.row]
         cell.attandanceTimeLabel.text = "8:00"
         cell.officeHourTimeLabel.text = "04:05:16"

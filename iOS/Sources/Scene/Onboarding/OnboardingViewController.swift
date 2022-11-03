@@ -40,7 +40,7 @@ class OnboardingViewController: BaseViewController {
             .disposed(by: disposeBag)
         userStartButton.rx.tap
             .subscribe(onNext: {
-                self.navigationController?.pushViewController(ViewController(), animated: true)
+                self.navigationController?.pushViewController(UserSigninViewController(), animated: true)
             })
             .disposed(by: disposeBag)
     }

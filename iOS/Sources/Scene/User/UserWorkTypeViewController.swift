@@ -2,6 +2,8 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class UserWorkTypeViewController: BaseViewController {
 
@@ -11,13 +13,11 @@ class UserWorkTypeViewController: BaseViewController {
         $0.layer.cornerRadius = 8
         $0.tintColor = .black
     }
-    private let menu = UIMenu(title: "", children: [
-        UIAction(title: "재택근무") { action in
-        },
-        UIAction(title: "회사출근") { action in
-        }
+    let menu = UIMenu(title: "", children: [
+        UIAction(title: "재택근무") { _ in },
+        UIAction(title: "회사출근") { _ in }
     ])
-    private let attandanceBtn = UIButton(type: .system).then {
+    let attandanceBtn = UIButton(type: .system).then {
         $0.backgroundColor = .setRGB(red: 255, green: 218, blue: 85, alpha: 100)
         $0.setTitle("출근 하러가기", for: .normal)
         $0.setTitleColor(.black, for: .normal)
@@ -47,6 +47,9 @@ class UserWorkTypeViewController: BaseViewController {
         }
     }
 
+    private func setText(_ title: String) {
+        button.setTitle(title, for: .normal)
+    }
     private func setButton() {
         self.button.menu = menu
         self.button.showsMenuAsPrimaryAction = true

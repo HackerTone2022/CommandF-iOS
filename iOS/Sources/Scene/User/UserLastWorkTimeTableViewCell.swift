@@ -42,9 +42,9 @@ class UserLastWorkTimeViewCell: UITableViewCell {
         super.layoutSubviews()
         addSubviews()
         makeSubviewsConstraint()
-        self.backgroundColor = .white
+        self.contentView.backgroundColor = .white
         self.contentView.layer.cornerRadius = 8
-        self.contentView.backgroundColor = .setRGB(red: 255, green: 238, blue: 177, alpha: 100)
+        self.contentView.backgroundColor = .white
         contentView.frame = contentView.frame.inset(
             by: UIEdgeInsets(top: 5, left: 0, bottom: 0, right: 0)
         )

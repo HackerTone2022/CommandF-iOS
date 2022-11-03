@@ -7,13 +7,11 @@ class UserHomeTableViewCell: UITableViewCell {
 
     static let identifier = "UserHomeTableViewCell"
 
-    private let noticeImgView = UIImageView().then {
-        $0.image = UIImage(systemName: "bell.badge")
+    let noticeImgView = UIImageView().then {
         $0.tintColor = .black
     }
-    private let contentLabel = UILabel().then {
+    let contentLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 16, weight: .regular)
-        $0.text = "인사팀 회의 - \(Date())"
     }
 
     override func awakeFromNib() {
@@ -28,7 +26,6 @@ class UserHomeTableViewCell: UITableViewCell {
         makeSubviewsConstraint()
         self.backgroundColor = .setRGB(red: 246, green: 246, blue: 246, alpha: 100)
         self.contentView.layer.cornerRadius = 8
-        self.contentView.backgroundColor = .setRGB(red: 255, green: 238, blue: 177, alpha: 100)
         contentView.frame = contentView.frame.inset(
             by: UIEdgeInsets(top: 13, left: 0, bottom: 0, right: 0)
         )

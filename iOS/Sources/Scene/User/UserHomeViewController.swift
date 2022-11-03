@@ -2,11 +2,15 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class UserHomeViewController: BaseViewController {
 
     private let userAddToDoListViewController = UserAddToDoListViewController()
     private let userWorkTypeViewController = UserWorkTypeViewController()
+    var image = ["bell", "pencil", "pencil"]
+    var content = ["인사팀 회의 - 4 : 30", "프로젝트 개발 - 5 : 00", "알고리즘 스터디 - 6 : 30"]
     private let staffInformationView = UIView().then {
         $0.layer.cornerRadius = 20
         $0.backgroundColor = .white
@@ -22,7 +26,6 @@ class UserHomeViewController: BaseViewController {
     }
     private let workStatesLabel = UILabel().then {
         $0.backgroundColor = .setRGB(red: 255, green: 218, blue: 85, alpha: 100)
-        $0.text = "근무중"
         $0.font = .systemFont(ofSize: 10, weight: .regular)
         $0.textAlignment = .center
         $0.clipsToBounds = true
@@ -77,7 +80,12 @@ class UserHomeViewController: BaseViewController {
         self.toDoTableView.dataSource = self
         setButton()
     }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.workStatesLabel.text = "출근전"
+    }
     override func setNavigation() {
+        super.setNavigation()
         self.navigationItem.title = "홈"
     }
     override func addSubviews() {
@@ -170,6 +178,14 @@ class UserHomeViewController: BaseViewController {
         }
     }
 
+    private func timer() {
+        Observable<Int>
+            .interval(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: {
+                self.officeHourTimeLabel.text = String(format: "00:00:%02d", $0)
+            })
+            .disposed(by: disposeBag)
+    }
     private func setButton() {
         addBtn.rx.tap
             .subscribe(onNext: { [weak self] in
@@ -180,6 +196,25 @@ class UserHomeViewController: BaseViewController {
             .subscribe(onNext: { [weak self] in
                 self?.secondPresentModal()
             }).disposed(by: disposeBag)
+
+        userWorkTypeViewController.attandanceBtn.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.attandanceTimeLabel.text = "\(Date().timeToString())"
+                self?.workStatesLabel.text = "근무중"
+                self?.timer()
+                self?.attandanceBtn.isHidden = true
+                self?.dismiss(animated: true)
+            })
+            .disposed(by: disposeBag)
+        self.userAddToDoListViewController.addButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.image.append("pencil")
+                self.dismiss(animated: true)
+                let contentText = "\(self.userAddToDoListViewController.toDoTextField.text ?? "") - \(self.userAddToDoListViewController.timeTextField.text ?? "")"
+                self.content.append(contentText)
+                self.toDoTableView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     private func presentModal() {
         userAddToDoListViewController.modalPresentationStyle = .pageSheet
@@ -191,7 +226,7 @@ class UserHomeViewController: BaseViewController {
         self.present(userAddToDoListViewController, animated: true)
     }
     private func secondPresentModal() {
-        userAddToDoListViewController.modalPresentationStyle = .pageSheet
+        userWorkTypeViewController.modalPresentationStyle = .pageSheet
 
         if let sheet = userWorkTypeViewController.sheetPresentationController {
             sheet.detents = [.medium(), .large()]
@@ -203,18 +238,21 @@ class UserHomeViewController: BaseViewController {
         profileImgView.image = UIImage(systemName: "circle.fill")
         profileLable.text = "김시안"
         teamLabel.text = "인사팀"
-        attandanceTimeLabel.text = "8:00"
-        officeHourTimeLabel.text = "04:05:16"
+        attandanceTimeLabel.text = ""
+        officeHourTimeLabel.text = ""
     }
 }
 
 extension UserHomeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return content.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserHomeTableViewCell", for: indexPath)
                 as? UserHomeTableViewCell else { return UITableViewCell() }
+        cell.noticeImgView.image = UIImage(systemName: image[indexPath.row])
+        cell.contentLabel.text = content[indexPath.row]
+        cell.contentView.backgroundColor = image[indexPath.row] == "bell" ? .setRGB(red: 255, green: 238, blue: 177, alpha: 100) : .white
         return cell
     }
 }

@@ -9,7 +9,7 @@ class UserAddToDoListViewController: BaseViewController {
         $0.font = .systemFont(ofSize: 14, weight: .medium)
         $0.text = "ToDo"
     }
-    private let toDoTextField = UITextField().then {
+    let toDoTextField = UITextField().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 8
         $0.layer.borderWidth = 1
@@ -22,7 +22,7 @@ class UserAddToDoListViewController: BaseViewController {
         $0.font = .systemFont(ofSize: 14, weight: .medium)
         $0.text = "Time"
     }
-    private let timeTextField = UITextField().then {
+    let timeTextField = UITextField().then {
         $0.backgroundColor = .white
         $0.layer.cornerRadius = 8
         $0.layer.borderWidth = 1
@@ -31,7 +31,7 @@ class UserAddToDoListViewController: BaseViewController {
         $0.font = .systemFont(ofSize: 12, weight: .regular)
         $0.addLeftPadding()
     }
-    private let contentLabel = UILabel().then {
+    let contentLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 14, weight: .medium)
         $0.text = "Content"
     }
@@ -41,7 +41,7 @@ class UserAddToDoListViewController: BaseViewController {
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.setRGB(red: 255, green: 218, blue: 85, alpha: 100).cgColor
     }
-    private let addButton = UIButton(type: .system).then {
+    let addButton = UIButton(type: .system).then {
         $0.backgroundColor = .setRGB(red: 255, green: 218, blue: 85, alpha: 100)
         $0.setTitle("추가하기", for: .normal)
         $0.setTitleColor(.black, for: .normal)

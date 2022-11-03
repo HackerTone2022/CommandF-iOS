@@ -31,6 +31,7 @@ class UserSigninViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setTextField()
+        setButton()
     }
     override func setNavigation() {
         self.navigationItem.title = "로그인"
@@ -59,6 +60,15 @@ class UserSigninViewController: BaseViewController {
             $0.height.equalTo(50)
             $0.bottom.equalToSuperview().inset(42)
         }
+    }
+    private func setButton() {
+        loginButton.rx.tap
+            .subscribe(onNext: {
+                if self.idTextField.text == "sian7563" && self.passwordTextField.text == "qwer1234!" {
+                    self.navigationController?.pushViewController(UserHomeViewController(), animated: true)
+                }
+            })
+            .disposed(by: disposeBag)
     }
     private func setTextField() {
         idTextField.rx.text.orEmpty
