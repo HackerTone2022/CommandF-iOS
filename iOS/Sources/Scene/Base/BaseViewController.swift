@@ -23,5 +23,5 @@ class BaseViewController: UIViewController {
     func addSubviews() { }
     func makeSubviewConstraints() { }
     func bind() { }
-    func setNavigation() { }
+    func setNavigation() { self.navigationController?.navigationBar.setBackButtonToArrow() }
 }
