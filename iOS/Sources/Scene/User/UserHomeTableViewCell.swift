@@ -15,14 +15,13 @@ class UserHomeTableViewCell: UITableViewCell {
         $0.font = .systemFont(ofSize: 16, weight: .regular)
         $0.text = "인사팀 회의 - \(Date())"
     }
+
     override func awakeFromNib() {
         super.awakeFromNib()
     }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-
     override func layoutSubviews() {
         super.layoutSubviews()
         addSubviews()
@@ -37,6 +36,7 @@ class UserHomeTableViewCell: UITableViewCell {
         self.contentView.layer.shadowOpacity = 0.1
         self.contentView.layer.shadowOffset = .init(width: 0, height: 5)
     }
+
     private func addSubviews() {
         [noticeImgView,
          contentLabel
