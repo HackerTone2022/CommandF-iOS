@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIColor {
-    func setRGB(
+    static func setRGB(
         red: CGFloat,
         green: CGFloat,
         blue: CGFloat,
