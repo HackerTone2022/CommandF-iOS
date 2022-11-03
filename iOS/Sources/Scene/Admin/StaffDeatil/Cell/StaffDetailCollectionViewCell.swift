@@ -48,7 +48,6 @@ class StaffDetailCollectionViewCell: UICollectionViewCell {
         contentView.layer.shadowOpacity = 0.2
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: 0, left: 0, bottom: 10, right: 5))
     }
-
 }
 
 extension StaffDetailCollectionViewCell {
