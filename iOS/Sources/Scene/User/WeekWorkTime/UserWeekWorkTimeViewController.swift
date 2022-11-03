@@ -5,6 +5,8 @@ import Then
 
 class UserWeekWorkTimeViewController: BaseViewController {
 
+    var name = ["2022.10.24", "2022.10.25", "2022.10.26", "2022.10.27", "2022.10.28"]
+
     private let nameLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 15, weight: .regular)
     }
@@ -41,6 +43,7 @@ class UserWeekWorkTimeViewController: BaseViewController {
         demoData()
         self.workTimeTableView.delegate = self
         self.workTimeTableView.dataSource = self
+//        setButton()
     }
     override func setNavigation() {
         self.navigationItem.title = "주 근무시간 확인"
@@ -83,19 +86,30 @@ class UserWeekWorkTimeViewController: BaseViewController {
             $0.bottom.equalToSuperview()
         }
     }
+
+//    private func setButton() {
+//        checkBtn.rx.tap
+//            .subscribe(onNext: { [weak self] in
+//                self?.presentModal()
+//            }).disposed(by: disposeBag)
+//    }
+//    private func secondPresentModal() {
+//        self.present(userWorkTypeViewController, animated: true)
+//    }
 }
 
 extension UserWeekWorkTimeViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return name.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserWeekWorkTimeTableViewCell", for: indexPath)
                 as? UserWeekWorkTimeTableViewCell else { return UITableViewCell() }
-        cell.dateLabel.text = "2022.10.24"
+        cell.dateLabel.text = name[indexPath.row]
         cell.attandanceTimeLabel.text = "8:00"
         cell.officeHourTimeLabel.text = "04:05:16"
         cell.leaveWorkTimeLabel.text = "17:00"
+
         return cell
     }
 }
