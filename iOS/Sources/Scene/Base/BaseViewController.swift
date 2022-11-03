@@ -8,7 +8,8 @@ class BaseViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .setRGB(red: 246, green: 246, blue: 246, alpha: 100)
+        setNavigation()
     }
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
@@ -19,4 +20,5 @@ class BaseViewController: UIViewController {
     func addSubivews() { }
     func makeSubviewConstraints() { }
     func bind() { }
+    func setNavigation() { }
 }
