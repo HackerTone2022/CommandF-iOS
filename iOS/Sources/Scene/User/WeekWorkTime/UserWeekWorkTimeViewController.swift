@@ -2,6 +2,8 @@ import UIKit
 
 import SnapKit
 import Then
+import RxSwift
+import RxCocoa
 
 class UserWeekWorkTimeViewController: BaseViewController {
 
@@ -39,6 +41,7 @@ class UserWeekWorkTimeViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         demoData()
+        setButton()
         self.workTimeTableView.delegate = self
         self.workTimeTableView.dataSource = self
     }
@@ -82,6 +85,15 @@ class UserWeekWorkTimeViewController: BaseViewController {
             $0.leading.trailing.equalToSuperview().inset(20)
             $0.bottom.equalToSuperview()
         }
+    }
+    private func setButton() {
+        checkBtn.rx.tap
+            .subscribe(onNext: {
+                self.navigationController?.pushViewController(
+                    UserLastWorkTimeViewController(), animated: true
+                )
+            })
+            .disposed(by: disposeBag)
     }
 }
 

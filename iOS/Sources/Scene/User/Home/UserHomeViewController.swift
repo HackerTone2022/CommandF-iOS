@@ -15,6 +15,9 @@ class UserHomeViewController: BaseViewController {
         $0.layer.cornerRadius = 20
         $0.backgroundColor = .white
     }
+    private let button = UIButton().then {
+        $0.backgroundColor = .clear
+    }
     private let profileImgView = UIImageView().then {
         $0.tintColor = .black
     }
@@ -90,6 +93,7 @@ class UserHomeViewController: BaseViewController {
     }
     override func addSubviews() {
         [staffInformationView,
+         button,
          attandanceBtn,
          toDoLabel,
          addBtn,
@@ -114,6 +118,9 @@ class UserHomeViewController: BaseViewController {
             $0.top.equalToSuperview().inset(100)
             $0.leading.trailing.equalToSuperview().inset(15)
             $0.height.equalTo(120)
+        }
+        button.snp.makeConstraints {
+            $0.edges.equalTo(staffInformationView)
         }
         profileImgView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
@@ -191,7 +198,14 @@ class UserHomeViewController: BaseViewController {
             .subscribe(onNext: { [weak self] in
                 self?.presentModal()
             }).disposed(by: disposeBag)
-
+        button.rx.tap
+            .subscribe(onNext: {
+                self.navigationController?.pushViewController(
+                    UserWeekWorkTimeViewController(),
+                    animated: true
+                )
+            })
+            .disposed(by: disposeBag)
         attandanceBtn.rx.tap
             .subscribe(onNext: { [weak self] in
                 self?.secondPresentModal()

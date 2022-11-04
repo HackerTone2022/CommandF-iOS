@@ -76,7 +76,7 @@ class UserSigninViewController: BaseViewController {
             .subscribe(onNext: { [weak self] isEmpty in
                 self?.idTextField.layer.addBorder(
                     [.bottom],
-                    color: isEmpty ? .white : .gray ,
+                    color: isEmpty ? .white : .gray,
                     width: 1
                 )
             }).disposed(by: disposeBag)
@@ -85,7 +85,7 @@ class UserSigninViewController: BaseViewController {
             .subscribe(onNext: { [weak self] isEmpty in
                 self?.passwordTextField.layer.addBorder(
                     [.bottom],
-                    color: isEmpty ? .white : .gray ,
+                    color: isEmpty ? .white : .gray,
                     width: 1
                 )
             }).disposed(by: disposeBag)
